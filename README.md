@@ -1,6 +1,6 @@
-# ☁ Notes Cloud
+# ☁ Box Store Cloud
 
-A simple and modern Cloud-Based Notes Sharing Web Application built with HTML, CSS, JavaScript, and Python Flask.
+A simple and modern Cloud-Based  Storing Web Application built with HTML, CSS, JavaScript, and Python Flask.
 
 ## Features
 
