@@ -93,6 +93,15 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('login'))
 
+
+@app.route('/favicon.ico')
+def favicon():
+    # Serve a simple transparent favicon if file missing to avoid 500 in browser console
+    icon_path = os.path.join(app.static_folder, 'favicon.ico')
+    if os.path.exists(icon_path):
+        return send_from_directory(app.static_folder, 'favicon.ico')
+    return ('', 204)
+
 @app.route('/api/files')
 def get_files():
     metadata = get_metadata()
