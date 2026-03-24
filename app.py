@@ -9,13 +9,22 @@ users = {
     'admin': 'admin123'
 }
 
-UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER', '/tmp/uploads')
 METADATA_FILE = os.path.join(UPLOAD_FOLDER, 'metadata.json')
 SHARE_TOKENS_FILE = os.path.join(UPLOAD_FOLDER, 'share_tokens.json')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
+    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+# In case of deployment read-only root, fallback to /tmp
+if not os.path.exists(UPLOAD_FOLDER):
+    UPLOAD_FOLDER = '/tmp/uploads'
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+METADATA_FILE = os.path.join(app.config['UPLOAD_FOLDER'], 'metadata.json')
+SHARE_TOKENS_FILE = os.path.join(app.config['UPLOAD_FOLDER'], 'share_tokens.json')
 
 if not os.path.exists(METADATA_FILE):
     with open(METADATA_FILE, 'w') as f:
@@ -240,6 +249,18 @@ def shared_link(token):
         return jsonify({'error': 'Token expired'}), 410
 
     return send_from_directory(app.config['UPLOAD_FOLDER'], entry['filename'])
+
+
+@app.errorhandler(404)
+def not_found(e):
+    return jsonify({'error': 'Not found'}), 404
+
+
+@app.errorhandler(500)
+def internal_error(e):
+    import traceback
+    traceback.print_exc()
+    return jsonify({'error': 'Internal Server Error'}), 500
 
 
 if __name__ == '__main__':
