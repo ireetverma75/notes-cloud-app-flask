@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>☁ Notes Cloud</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>☁ Notes Cloud</h1>
+            <div>
+                {% if username %}
+                    <span class="user-label">Hello, {{ username }}</span>
+                    <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+                {% endif %}
+                <button id="theme-toggle">🌙</button>
+            </div>
+        </header>
+
+        <div id="toast" class="toast hidden"></div>
+
+        <div class="search-upload">
+            <input type="text" id="search" placeholder="Search notes...">
+            <select id="type-filter">
+                <option value="">All Types</option>
+                <option value="pdf">PDF</option>
+                <option value="image">Image</option>
+                <option value="other">Other</option>
+            </select>
+            <button id="bulk-delete" class="danger" disabled>Delete Selected</button>
+        </div>
+
+        <div id="drag-drop" class="drag-drop">Drag & Drop files here</div>
+
+        <div id="upload-section" class="upload-section">
+            <input type="file" id="file-input" multiple>
+            <input type="text" id="category" placeholder="Category/tag (optional)">
+            <button id="upload-btn">Upload</button>
+        </div>
+
+        <div class="panel">
+            <h2>Notifications</h2>
+            <div id="notification-list" class="notification-list"></div>
+            <button id="clear-notifications">Clear</button>
+        </div>
+
+        <div class="notes-grid" id="notes-grid"></div>
+
+        <div id="preview-modal" class="modal hidden">
+            <div class="modal-content">
+                <span id="preview-close" class="close">&times;</span>
+                <div id="preview-body"></div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
