@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  notescloud:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./uploads:/app/uploads
+      - ./templates:/app/templates
+      - ./static:/app/static
+    environment:
+      - FLASK_ENV=development
+      - PORT=5000
